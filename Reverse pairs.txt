@@ -1,0 +1,67 @@
+class Solution {
+    private int mergeSort(int[] arr, int low, int high)
+    {
+      if(low >= high)
+      {
+          return 0;
+      }
+        int invc = 0;
+      int mid = (low+high)/2;
+      invc += mergeSort(arr, low, mid);
+      invc +=  mergeSort(arr, mid+1, high);
+      invc += merge(arr, low, mid, high);
+      return invc;
+    }
+    
+    private int merge(int[] arr, int low, int mid, int high)
+    {
+        int [] B = new int[high-low+1];
+        int i  = low;
+        int j = mid+1;
+        int invc = 0;
+        while(i <= mid && j<= high)
+        {
+            if((long) arr[i] > (long) 2 * arr[j])
+            {
+                invc = invc + (mid-i) + 1;
+                j++;
+            }
+            else{
+                i++;
+            }
+        }
+        int left = low, rigth = mid+1, index = 0;
+        while(left<= mid && rigth <= high)
+        {
+            if(arr[left] <= arr[rigth])
+            {
+                B[index] = arr[left];
+                index++;
+                left++;
+            }
+            else{
+                B[index] = arr[rigth];
+                index++;
+                rigth++;
+            }
+        }
+        while(left <= mid)
+        {
+            B[index] = arr[left];
+            index++;
+            left++;
+        }
+        while(rigth <= high)
+        {
+            B[index] = arr[rigth];
+            index++;
+            rigth++;
+        }
+       System.arraycopy(B, 0, arr, low, high-low+1);
+        return invc;
+    }
+    
+    public int reversePairs(int[] nums) {
+        return mergeSort(nums, 0, nums.length-1);
+    }
+}
